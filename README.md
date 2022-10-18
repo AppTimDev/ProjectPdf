@@ -6,6 +6,7 @@
 - Add watermark to a pdf file
 - Merge pdf files
 - Extract pdf pages of an existing pdf file to a new pdf file
+- Rotate a pdf file
 ---
 ## Environment:
 - Windows 10
