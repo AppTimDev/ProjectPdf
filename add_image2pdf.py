@@ -1,14 +1,9 @@
 '''
-Environment:
--Python 3.10.4
--PyPDF2 2.10.8
--PyMuPDF 1.20.2
-
 Usage:
 Add a watermark image file to a pdf file
 
 '''
-from PyPDF2 import PdfFileReader, PdfFileWriter
+from PyPDF2 import PdfReader, PdfWriter
 from os import path
 import fitz
 
@@ -39,21 +34,17 @@ try:
     
     #2. Merge the watermark pdf to the input pdf. 
     with open(path_input, "rb") as f_input, open(path_watermark, "rb") as f_watermark:
-        fr_input = PdfFileReader(f_input)
-        #fr_watermark = PdfFileReader(f_watermark)
-        #page_watermark = fr_watermark.getPage(0)
-
-        fw = PdfFileWriter()
-        for i in range(fr_input.getNumPages()):
-            page = fr_input.getPage(i)
+        fr_input = PdfReader(f_input)
+        fw = PdfWriter()
+        pageNum = len(fr_input.pages)
+        for i in range(pageNum):
+            page = fr_input.pages[i]
 
             #important: keep watermark pdf on the bottom
-            fr_watermark = PdfFileReader(f_watermark)
-            page_watermark = fr_watermark.getPage(0)            
+            fr_watermark = PdfReader(f_watermark)      
+            page_watermark = fr_watermark.pages[0]      
             page_watermark.merge_page(page)
-            fw.addPage(page_watermark)
-            # page.merge_page(page_watermark)
-            # fw.add_page(page)
+            fw.add_page(page_watermark)
 
         with open(path_output, "wb") as f_output:
             fw.write(f_output)

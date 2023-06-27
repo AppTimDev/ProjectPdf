@@ -1,8 +1,4 @@
 """
-Environment:
--Python 3.10.4
--PyPDF2 (Version: 2.10.8)
-
 Usage:
 Extract selected pages from a pdf file and the pages will be combined to produce a new pdf file.
 
@@ -11,7 +7,7 @@ input_filename
 output_filename
 page_indexes
 """
-from PyPDF2 import PdfFileReader, PdfFileWriter
+from PyPDF2 import PdfReader, PdfWriter
 from os import path
 
 
@@ -23,13 +19,13 @@ def extract_pdf_pages(page_indexes, input_filename, output_filename):
     output_file_full_name = path.join(cfd, output_filename)
 
     with open(input_file_full_name, 'rb') as f_input:
-        pdf_input = PdfFileReader(f_input)
-        page_count = pdf_input.getNumPages()
+        pdf_input = PdfReader(f_input)
+        page_count = len(pdf_input.pages)
         #print('num of page:', page_count)
-        pdf_output = PdfFileWriter()
+        pdf_output = PdfWriter()
         for i in page_indexes:
-            page = pdf_input.getPage(i)
-            pdf_output.addPage(page)
+            page = pdf_input.pages[i]
+            pdf_output.add_page(page)
         
         with open(output_file_full_name, 'wb') as f_output:
             pdf_output.write(f_output)
@@ -39,7 +35,7 @@ def main():
     try:
         #User-defined variables        
         input_filename = 'pdfs/input.pdf'
-        output_filename = 'pdfs/extract.pdf'
+        output_filename = 'pdfs/output_extract.pdf'
         page_indexes = [1,3]
 
         extract_pdf_pages(page_indexes, input_filename, output_filename)

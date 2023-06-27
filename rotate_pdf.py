@@ -1,8 +1,4 @@
 """
-Environment:
--Python 3.10.4
--PyPDF2 (Version: 2.10.8)
-
 Usage:
 Rotate a pdf file
 
@@ -12,7 +8,7 @@ output_filename
 rotate_degree
 """
 
-from PyPDF2 import PdfFileReader, PdfFileWriter
+from PyPDF2 import PdfReader, PdfWriter
 from os import path
 
 #User-defined variables
@@ -27,13 +23,13 @@ try:
     output_pdf = path.join(cfd, output_filename)
 
     with open(input_pdf, "rb") as f_input:
-        input_fr = PdfFileReader(f_input)
+        input_fr = PdfReader(f_input)
 
-        fw = PdfFileWriter()
-        for i in range(input_fr.getNumPages()):
-            page = input_fr.getPage(i)
-            page.rotate_clockwise(rotate_degree)
-            fw.addPage(page)
+        fw = PdfWriter()
+        for i in range(len(input_fr.pages)):
+            page = input_fr.pages[i]
+            page.rotate(rotate_degree)
+            fw.add_page(page)
 
         with open(output_pdf, "wb") as f_output:
             fw.write(f_output)

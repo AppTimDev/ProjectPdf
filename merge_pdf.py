@@ -1,8 +1,4 @@
 """
-Environment:
--Python 3.10.4
--PyPDF2 (Version: 2.10.8)
-
 Usage:
 Merge pdfs
 
@@ -10,21 +6,21 @@ User-defined variables:
 filenames
 output_filename
 """
-from PyPDF2 import PdfFileReader, PdfFileWriter
+from PyPDF2 import PdfReader, PdfWriter
 from os import path
 
 
 def merge(filenames, outputfile_path):
     print(f'Output file path: {outputfile_path}')
-    pdf_output = PdfFileWriter()
+    pdf_output = PdfWriter()
     for filename in filenames:
         print(f'merge file: {filename}')
-        pdf_input = PdfFileReader(filename)
+        pdf_input = PdfReader(filename)
         if pdf_input is None:
             return
-        total_page_num = pdf_input.numPages        
+        total_page_num = len(pdf_input.pages)
         for i in range(total_page_num):                
-            pdf_output.addPage(pdf_input.getPage(i))
+            pdf_output.add_page(pdf_input.pages[i])
 
     with open(outputfile_path, 'wb') as f_output:
         pdf_output.write(f_output)
@@ -33,8 +29,8 @@ def merge(filenames, outputfile_path):
 def main():
     try:
         #User-defined variables        
-        filenames = [r'pdfs\test1.pdf', r'pdfs\test2.pdf']
-        output_filename = r'pdfs\merge.pdf'
+        filenames = [r'pdfs\input.pdf', r'pdfs\input.pdf']
+        output_filename = r'pdfs\output.pdf'
 
         cfd = path.dirname(__file__)
         input_file_names = []

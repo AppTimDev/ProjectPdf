@@ -1,7 +1,4 @@
 """
-Environment:
--Python 3.10.4
--PyPDF2 (Version: 2.10.8)
 
 Usage:
 Split pdf
@@ -17,7 +14,7 @@ User-defined variables:
 input_filename
 page_indexes
 """
-from PyPDF2 import PdfFileReader, PdfFileWriter
+from PyPDF2 import PdfReader, PdfWriter
 from os import path
 
 def split_by_pages_indexes(input_file_name, page_indexes):
@@ -29,11 +26,11 @@ def split_by_pages_indexes(input_file_name, page_indexes):
     cfd = path.dirname(__file__)
     input_file_full_name = path.join(cfd, input_file_name)
     with open(input_file_full_name, 'rb') as f_input:
-        pdf_input = PdfFileReader(f_input)
+        pdf_input = PdfReader(f_input)
         if pdf_input is None:
             return
 
-        total_page_num = pdf_input.numPages
+        total_page_num = len(pdf_input.pages)
         print('total page:',total_page_num)
 
         split_indexes = []
@@ -45,7 +42,7 @@ def split_by_pages_indexes(input_file_name, page_indexes):
         #print(split_indexes)       
 
         for split_index in split_indexes:
-            pdf_output = PdfFileWriter()
+            pdf_output = PdfWriter()
             
             start = split_index[0] -1
             end = split_index[1]-1
@@ -53,7 +50,7 @@ def split_by_pages_indexes(input_file_name, page_indexes):
             split_pdf_name = "".join(input_file_name.split('.')[:-1]) + '_' + str(start+1) + '.pdf'
 
             for i in range(start, end):
-                pdf_output.addPage(pdf_input.getPage(i))
+                pdf_output.add_page(pdf_input.pages[i])
 
             output_file_full_name = path.join(cfd, split_pdf_name)
             with open(output_file_full_name, 'wb') as f_output:
